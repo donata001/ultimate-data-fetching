@@ -116,7 +116,7 @@ class MainPage(webapp2.RequestHandler):
         base_url = 'https://graph.facebook.com/'
         try:
             for query in query_list:
-                url=base_url+query
+                url=base_url+query+'access_token=****'
                 response=urlopen(url)
                 js=load(response)
                 name=js['name']
