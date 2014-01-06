@@ -114,8 +114,9 @@ class MainPage(webapp2.RequestHandler):
         datastore1={}
         datastore2={}
         base_url = 'https://graph.facebook.com/'
-        try:
-            for query in query_list:
+        
+        for query in query_list:
+            try:
                 url=base_url+query+'access_token=****'
                 response=urlopen(url)
                 js=load(response)
@@ -126,8 +127,8 @@ class MainPage(webapp2.RequestHandler):
                 datastore[query]={'name':name,'likes':likes,'TAC':TAC}
                 datastore1[query]={'name':name,'likes':likes}
                 datastore2[query]={'name':name,'TAC':TAC}
-        except Exception,e:
-            self.response.write(str(e))
+            except Exception,e:
+                continue
  
         description1={'name':('string','Company name'),
                       'likes':('number','Likes')}
