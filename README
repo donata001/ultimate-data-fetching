@@ -1,0 +1,7 @@
+Please visit http://ultimate-data-fetching.appspot.com/ for this app.
+
+This app fetches data from facebook based on their graph API, by comparing the fans number and how much people are talking, this app can help you determine which group or company is the hottest among your search.
+
+Develop environment:Python 2.7, Javascript, HTML, google app engine, google visualization chart
+
+Please refer to fb-test.py for original code.
