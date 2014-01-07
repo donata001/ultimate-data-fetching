@@ -1,7 +1,10 @@
 import webapp2
-from urllib2 import urlopen
+from urllib2 import urlopen,HTTPError
 from json import load
 import gviz_api
+
+
+
 
 html1="""
 <!doctype html>
@@ -15,23 +18,56 @@ html1="""
             h2 {
             font: bold 330%/100% "Lucida Grande";
             position: relative;
-            color: #464646;
-}
+            color: #CCCFFF;
+            }
+            body {
+            background-image: url(http://i.stack.imgur.com/7YKUD.jpg); no-repeat center center fixed;
+            }
+            lable {
+            font:bold 110% "Lucida Grande";
+            position:relative;
+            color:#FFCCFF;
+            }
+            p {
+            font:bold 150%"Lucida Grande";
+            position:relative;
+            color:white;
+            }
+            #submit {
+            width: 180px;
+            height: 60px;
+	    background-color: #F38630;
+	    color: #FFFFFF;
+	    border-radius: 5px;
+	    border: 4px solid #FA6900;
+	    font-family: Verdana, Arial, Sans-Serif;
+	    font-size: 1em;
+	    font-weight: bold;
+	    text-align: center;
+	    box-shadow: 5px 5px 5px #888;
+	    display: inline-block;
+	    margin-right: 20px;
+            }
              
         </style>
         <form method="post">
             <lable for="query1">Company1:</lable>
-            <input name="query1", type="text", value='gap'><br>          
+            <input name="query1", type="text", value='gap'><br>
+            <br>
             <lable for="query2">Company2:</lable>
             <input name="query2", type="text", value='bananarepublic'><br>
+            <br>
             <lable for="query3">Company3:</lable>
-            <input name="query3", type="text", value='jcrew'><br>          
+            <input name="query3", type="text", value='jcrew'><br>
+            <br>
             <lable for="query4">Company4:</lable>
             <input name="query4", type="text", value='coach'><br>
+            <br>
             <lable for="query5">Company5:</lable>
             <input name="query5", type="text", value='burberry'><br>
+            <br>
             <p><b>Please input interested companies to perform competitive analysis, up to 5 companies</b></p>
-            <input type="submit", value="submit query"><br>
+            <input type="submit", ID="submit", value="submit query"><br>
                
         </form>
     </body>
@@ -107,7 +143,8 @@ class MainPage(webapp2.RequestHandler):
     def post(self):
         query_list=[]
         for i in range (1,6):
-            query_list.append(self.request.get('query'+str(i)).encode('ascii','ignore'))
+            if self.request.get('query'+str(i)):
+                query_list.append(self.request.get('query'+str(i)).encode('ascii','ignore'))
         if not query_list:
             self.response.write('blanket inquery!')
         datastore={}
@@ -117,7 +154,7 @@ class MainPage(webapp2.RequestHandler):
         
         for query in query_list:
             try:
-                url=base_url+query+'access_token=****'
+                url=base_url+query
                 response=urlopen(url)
                 js=load(response)
                 name=js['name']
@@ -127,7 +164,8 @@ class MainPage(webapp2.RequestHandler):
                 datastore[query]={'name':name,'likes':likes,'TAC':TAC}
                 datastore1[query]={'name':name,'likes':likes}
                 datastore2[query]={'name':name,'TAC':TAC}
-            except Exception,e:
+            except HTTPError as e:                
+                self.response.write("Your search with "+query+" does not exit on Facebook!")
                 continue
  
         description1={'name':('string','Company name'),
@@ -169,24 +207,6 @@ class MainPage(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainPage),
 ], debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
