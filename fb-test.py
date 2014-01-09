@@ -165,9 +165,12 @@ class MainPage(webapp2.RequestHandler):
                 datastore1[query]={'name':name,'likes':likes}
                 datastore2[query]={'name':name,'TAC':TAC}
             except HTTPError as e:                
-                self.response.write("Your search with "+query+" does not exit on Facebook!")
+                self.response.write("Your search with "+query+" does not exit on Facebook!"+'<HTML><br></HTML>')
                 continue
- 
+            except KeyError:
+                self.response.write(query+' is a private user that need authrization to obtain the data'+'<HTML><br></HTML>')
+                continue
+
         description1={'name':('string','Company name'),
                       'likes':('number','Likes')}
         description2={'name':('string','Company name'), 'TAC':('number','people talking about this')}
